@@ -1,1 +1,167 @@
 # hieunghiat54.github.io
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Emm chỉ iuu mỗi chị thoii 💖</title>
+<style>
+  * {margin:0;padding:0;box-sizing:border-box;}
+  body {
+    background: #000;
+    overflow: hidden;
+    height: 100vh;
+    font-family: sans-serif;
+    color: #fff;
+  }
+
+  /* Scene */
+  .scene-wrap {
+    width: 100%;
+    height: 100%;
+    perspective: 1200px;
+    overflow: hidden;
+  }
+  .scene {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.2s linear;
+    position: relative;
+  }
+
+  /* Text rơi */
+  .floating {
+    position: absolute;
+    top: -50px;
+    white-space: nowrap;
+    font-size: 24px;
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 15px #f0f;
+    animation: fall linear forwards;
+  }
+  .heart { color: red; }
+  @keyframes fall {
+    from { transform: translateY(-50px) translateZ(var(--z)) scale(var(--scale)); opacity: 1; }
+    to { transform: translateY(110vh) translateZ(var(--z)) scale(var(--scale)); opacity: 0; }
+  }
+
+  /* Tim to giữa */
+  .big-heart-wrap {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+  }
+  .big-heart {
+    position: absolute;
+    font-size: 40vmin;
+    line-height: 1;
+    background: linear-gradient(45deg, hotpink, deeppink, red, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s infinite, colorShift 6s linear infinite;
+    text-shadow: 0 0 40px #ff66cc, 0 0 100px #ff3399, 0 0 160px #ff0066;
+    opacity: 0.9;
+  }
+  .layer2 { font-size: 50vmin; opacity: 0.4; filter: blur(8px); animation: pulse2 2s infinite, colorShift 8s linear infinite; }
+  .layer3 { font-size: 60vmin; opacity: 0.2; filter: blur(16px); animation: pulse3 2s infinite, colorShift 10s linear infinite; }
+
+  @keyframes pulse {0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.1);}}
+  @keyframes pulse2 {0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.15);}}
+  @keyframes pulse3 {0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.2);}}
+  @keyframes colorShift {0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);}}
+
+  /* Nút */
+  #playBtn {
+    position: fixed;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background: #111;
+    color: #fff;
+    border: 2px solid #f0f;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s;
+  }
+  #playBtn:hover {background:#f0f;color:#000;}
+</style>
+</head>
+<body>
+<button id="playBtn">▶ Bật nhạc & hiệu ứng</button>
+
+<div class="scene-wrap">
+  <div class="scene" id="scene"></div>
+</div>
+
+<div class="big-heart-wrap">
+  <div class="big-heart layer1">❤</div>
+  <div class="big-heart layer2">❤</div>
+  <div class="big-heart layer3">❤</div>
+</div>
+
+<audio id="bgm" src="https://docs.google.com/uc?export=download&id=1ph3wVXZ6Pppl0Cj8KAFf2qHqCt0q9XpA" type="audio/mp3"></audio>
+
+<script>
+const scene = document.getElementById("scene");
+const bgm = document.getElementById("bgm");
+const playBtn = document.getElementById("playBtn");
+
+const TEXTS = [
+  "Iu mỗi em",
+  "❤",
+  "Iu em",
+  "emm chỉ iuu mỗi chị thoii"
+];
+
+// random helper
+function rnd(min,max){return Math.random()*(max-min)+min;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+// spawn chữ
+function spawn() {
+  const el = document.createElement("div");
+  const txt = pick(TEXTS);
+  el.className = "floating" + (txt==="❤" ? " heart" : "");
+  el.textContent = txt;
+
+  const x = rnd(0, window.innerWidth) + "px";
+  const z = rnd(-400, 200) + "px";
+  const scale = rnd(0.6, 1.3);
+  const dur = rnd(6, 12);
+
+  el.style.left = x;
+  el.style.setProperty("--z", z);
+  el.style.setProperty("--scale", scale);
+  el.style.animationDuration = dur + "s";
+  el.style.fontSize = rnd(18, 34) + "px";
+
+  scene.appendChild(el);
+  setTimeout(()=>el.remove(), dur*1000);
+}
+
+let interval;
+playBtn.addEventListener("click", () => {
+  bgm.play();
+  playBtn.style.display="none";
+  for(let i=0;i<150;i++) spawn();
+  interval = setInterval(spawn, 150);
+});
+
+// xoay theo chuột
+document.addEventListener("mousemove", e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30; // nghiêng ngang
+  const y = (e.clientY / window.innerHeight - 0.5) * -30; // nghiêng dọc
+  scene.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+</script>
+</body>
+</html>
