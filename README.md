@@ -1,166 +1,184 @@
-# hieunghiat54.github.io
-<!DOCTYPE html>
+
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Emm chỉ iuu mỗi chị thoii 💖</title>
+<meta charset="utf-8">
+<title>Iu mỗi chị</title>
 <style>
-  * {margin:0;padding:0;box-sizing:border-box;}
   body {
+    margin: 0;
     background: #000;
     overflow: hidden;
-    height: 100vh;
+    perspective: 1000px;
     font-family: sans-serif;
-    color: #fff;
-  }
-
-  /* Scene */
-  .scene-wrap {
-    width: 100%;
-    height: 100%;
-    perspective: 1200px;
-    overflow: hidden;
   }
   .scene {
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    inset: 0;
     transform-style: preserve-3d;
-    transition: transform 0.2s linear;
-    position: relative;
   }
-
-  /* Text rơi */
   .floating {
     position: absolute;
-    top: -50px;
-    white-space: nowrap;
-    font-size: 24px;
+    top: -10vh;
+    left: 0;
+    font-weight: 700;
     color: #fff;
-    text-shadow: 0 0 5px #fff, 0 0 15px #f0f;
+    text-shadow: 0 0 8px #0ff, 0 0 16px #0ff;
+    white-space: nowrap;
+    pointer-events: none;
     animation: fall linear forwards;
   }
-  .heart { color: red; }
   @keyframes fall {
-    from { transform: translateY(-50px) translateZ(var(--z)) scale(var(--scale)); opacity: 1; }
-    to { transform: translateY(110vh) translateZ(var(--z)) scale(var(--scale)); opacity: 0; }
+    from { transform: translate3d(var(--x), -20vh, var(--z)) scale(var(--scale)); }
+    to   { transform: translate3d(var(--x), 110vh, var(--z)) scale(var(--scale)); }
+  }
+  .heart {
+    color: red;
+    text-shadow: 0 0 8px #f33, 0 0 18px #f33;
   }
 
-  /* Tim to giữa */
-  .big-heart-wrap {
+  /* Trái tim hồng bự ở giữa */
+  .big-heart {
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
+    font-size: 200px; /* LỚN HƠN */
+    color: hotpink;
+    text-shadow: 0 0 30px #f0c, 0 0 60px #f0c;
+    animation: pulse 1.5s infinite;
     pointer-events: none;
     z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
   }
-  .big-heart {
-    position: absolute;
-    font-size: 40vmin;
-    line-height: 1;
-    background: linear-gradient(45deg, hotpink, deeppink, red, violet);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: pulse 2s infinite, colorShift 6s linear infinite;
-    text-shadow: 0 0 40px #ff66cc, 0 0 100px #ff3399, 0 0 160px #ff0066;
-    opacity: 0.9;
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.4); }
   }
-  .layer2 { font-size: 50vmin; opacity: 0.4; filter: blur(8px); animation: pulse2 2s infinite, colorShift 8s linear infinite; }
-  .layer3 { font-size: 60vmin; opacity: 0.2; filter: blur(16px); animation: pulse3 2s infinite, colorShift 10s linear infinite; }
 
-  @keyframes pulse {0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.1);}}
-  @keyframes pulse2 {0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.15);}}
-  @keyframes pulse3 {0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.2);}}
-  @keyframes colorShift {0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);}}
-
-  /* Nút */
-  #playBtn {
+  .burst {
     position: fixed;
-    top: 20px; left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
+    top: 50%; left: 50%;
+    font-size: 28px;
+    color: hotpink;
+    opacity: 1;
+    pointer-events: none;
+    animation: burstAnim 1.2s forwards;
+  }
+  @keyframes burstAnim {
+    to {
+      transform: translate(var(--dx), var(--dy)) scale(0.5);
+      opacity: 0;
+    }
+  }
+
+  .play {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
     background: #111;
     color: #fff;
-    border: 2px solid #f0f;
-    border-radius: 12px;
-    font-size: 18px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    font-weight: bold;
     cursor: pointer;
     z-index: 10;
-    transition: 0.3s;
+    border: 1px solid #444;
   }
-  #playBtn:hover {background:#f0f;color:#000;}
+  #yt-holder {
+    position: fixed;
+    width: 1px; height: 1px;
+    left: -9999px; top: -9999px;
+    opacity: 0; pointer-events: none;
+  }
 </style>
 </head>
 <body>
-<button id="playBtn">▶ Bật nhạc & hiệu ứng</button>
-
-<div class="scene-wrap">
   <div class="scene" id="scene"></div>
-</div>
-
-<div class="big-heart-wrap">
-  <div class="big-heart layer1">❤</div>
-  <div class="big-heart layer2">❤</div>
-  <div class="big-heart layer3">❤</div>
-</div>
-
-<audio id="bgm" src="https://docs.google.com/uc?export=download&id=1ph3wVXZ6Pppl0Cj8KAFf2qHqCt0q9XpA" type="audio/mp3"></audio>
+  <div class="big-heart">❤</div>
+  <button class="play" id="playBtn">▶️ Bật nhạc & hiệu ứng</button>
+  <div id="yt-holder"></div>
 
 <script>
 const scene = document.getElementById("scene");
-const bgm = document.getElementById("bgm");
-const playBtn = document.getElementById("playBtn");
+const TOTAL = 200;
+const TEXTS = ["Iu mỗi chị", "❤", "Iu chị", "Iuu mỗii chịi"];
 
-const TEXTS = [
-  "Iu mỗi em",
-  "❤",
-  "Iu em",
-  "emm chỉ iuu mỗi chị thoii"
-];
+function rnd(min, max) { return Math.random() * (max - min) + min; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-// random helper
-function rnd(min,max){return Math.random()*(max-min)+min;}
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
-
-// spawn chữ
 function spawn() {
   const el = document.createElement("div");
-  const txt = pick(TEXTS);
-  el.className = "floating" + (txt==="❤" ? " heart" : "");
-  el.textContent = txt;
+  const isHeart = Math.random() < 0.3;
+  el.className = "floating" + (isHeart ? " heart" : "");
+  el.textContent = isHeart ? "❤" : pick(TEXTS);
 
   const x = rnd(0, window.innerWidth) + "px";
   const z = rnd(-400, 200) + "px";
   const scale = rnd(0.6, 1.3);
-  const dur = rnd(6, 12);
+  const dur = rnd(5, 12);
 
-  el.style.left = x;
+  el.style.setProperty("--x", x);
   el.style.setProperty("--z", z);
   el.style.setProperty("--scale", scale);
   el.style.animationDuration = dur + "s";
   el.style.fontSize = rnd(18, 34) + "px";
 
   scene.appendChild(el);
-  setTimeout(()=>el.remove(), dur*1000);
+  setTimeout(() => el.remove(), dur * 1000);
 }
 
-let interval;
-playBtn.addEventListener("click", () => {
-  bgm.play();
-  playBtn.style.display="none";
-  for(let i=0;i<150;i++) spawn();
-  interval = setInterval(spawn, 150);
+function start() {
+  for (let i = 0; i < TOTAL; i++) spawn();
+  setInterval(spawn, 200);
+  setInterval(heartBurst, 800); // tim giữa bắn ra
+}
+
+// === Xoay bằng chuột ===
+let isDragging = false, lastX=0, lastY=0;
+let rotX = 0, rotY = 0;
+window.addEventListener("mousedown", e=>{
+  isDragging = true; lastX = e.clientX; lastY = e.clientY;
+});
+window.addEventListener("mouseup", ()=> isDragging=false);
+window.addEventListener("mousemove", e=>{
+  if(!isDragging) return;
+  const dx = e.clientX - lastX;
+  const dy = e.clientY - lastY;
+  rotY += dx * 0.2;
+  rotX -= dy * 0.2;
+  scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  lastX = e.clientX; lastY = e.clientY;
 });
 
-// xoay theo chuột
-document.addEventListener("mousemove", e => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 30; // nghiêng ngang
-  const y = (e.clientY / window.innerHeight - 0.5) * -30; // nghiêng dọc
-  scene.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+// === Trái tim giữa phóng ra ===
+function heartBurst() {
+  for (let i = 0; i < 6; i++) {
+    const h = document.createElement("div");
+    h.className = "burst";
+    h.textContent = "❤";
+    h.style.setProperty("--dx", `${rnd(-250,250)}px`);
+    h.style.setProperty("--dy", `${rnd(-250,250)}px`);
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(), 1200);
+  }
+}
+
+// ==== YouTube Audio ====
+let ytReady=false, player;
+const playBtn=document.getElementById("playBtn");
+const tag=document.createElement("script");
+tag.src="https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
+
+window.onYouTubeIframeAPIReady=function(){
+  ytReady=true;
+  player=new YT.Player("yt-holder",{
+    videoId:"aeygAuvj5XQ",
+    playerVars:{autoplay:0,controls:0,loop:1,playlist:"aeygAuvj5XQ"},
+  });
+};
+playBtn.addEventListener("click",()=>{
+  start();
+  if(ytReady&&player){player.playVideo(); player.setVolume(80);}
+  playBtn.remove();
 });
 </script>
 </body>
